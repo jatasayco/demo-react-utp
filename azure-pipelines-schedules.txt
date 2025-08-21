@@ -1,0 +1,7 @@
+schedules:
+- cron: "0 13 * * 1-5"
+  displayName: "Build de lunes a viernes a las 8am (hora Perú)"
+  branches:
+    include:
+    - main
+  always: true

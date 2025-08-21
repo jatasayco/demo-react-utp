@@ -1,0 +1,13 @@
+#CI
+trigger: 
+  branches:
+    include: 
+    - dev
+    - qas
+    - main
+    - hotfix/*
+  paths:
+    include:
+    - /
+    exclude:
+    - 'azure-pipelines.yml'

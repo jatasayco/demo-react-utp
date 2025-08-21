@@ -1,0 +1,24 @@
+pool:
+  vmImage: ubuntu-latest
+
+stages:
+  - stage: BUILD
+    jobs:
+      - job: Build
+        timeoutInMinutes: 0
+        condition: succeeded()
+        steps:
+        - task: NodeTool@0
+          displayName: "Install Node.js"
+          inputs:
+            versionSpec: 20.x
+        - script: npm install
+          displayName: "Project install"
+        - script: npm run build
+          displayName: "Project build"
+        - task: PublishPipelineArtifact@1
+          displayName: 'Publish Build Artifacts'
+          inputs:
+            targetPath: 'build'
+            artifact: 'react-dist'
+            publishLocation: 'pipeline'

@@ -1,0 +1,43 @@
+trigger: 
+  branches:
+    include: 
+    - dev
+    - qas
+    - main
+    - hotfix/*
+  paths:
+    include:
+    - /
+    exclude:
+    - 'azure-pipelines.yml'
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+- group: front-dev
+
+stages:
+  - stage: BUILD
+    jobs:
+      - job: Build
+        timeoutInMinutes: 0
+        condition: succeeded()
+        steps:
+        - script: echo 'La versión de Node es $(version_node)'
+          displayName: "Mostrar variables"
+        - task: NodeTool@0
+          displayName: "Install Node.js"
+          inputs:
+            versionSpec: $(version_node)
+
+        - script: npm install
+          displayName: "Project install"
+        - script: npm run build
+          displayName: "Project build"
+        - task: PublishPipelineArtifact@1
+          displayName: 'Publish Build Artifacts'
+          inputs:
+            targetPath: 'dist'
+            artifact: 'react-dist'
+            publishLocation: 'pipeline'
