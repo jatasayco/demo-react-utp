@@ -1,0 +1,65 @@
+schedules:
+- cron: "0 13 * * 1-5"
+  displayName: "Build de lunes a viernes a las 8am (hora Perú)"
+  branches:
+    include:
+    - main
+  always: true
+  
+trigger: 
+  branches:
+    include: 
+    - dev
+    - qas
+    - main
+    - hotfix/*
+  paths:
+    include:
+    - /
+    exclude:
+    - 'azure-pipelines.yml'
+
+pool:
+  vmImage: ubuntu-latest
+variables:
+- group: front-dev
+
+stages:
+  - stage: BUILD
+    jobs:
+      - job: Build
+        timeoutInMinutes: 0
+        condition: succeeded()
+        steps:
+        - script: echo 'La versión de Node es $(version_node)'
+          displayName: "Mostrar variables"
+        - task: NodeTool@0
+          displayName: "Install Node.js"
+          inputs:
+            versionSpec: $(version_node)
+        - script: npm install
+          displayName: "Project install"
+        - task: SonarCloudPrepare@1
+          displayName: "Prepare SonarCloud analysis"
+          inputs:
+            SonarCloud: "SONAR"   # Nombre de tu service connection
+            organization: "sonar-jair-tasayco"      # Organización en SonarCloud
+            scannerMode: "CLI"
+            configMode: "manual"
+            cliProjectKey: "demo-react-utp"   # Key único del proyecto
+            cliProjectName: "demo-react-utp"
+            cliSources: "src"
+        - script: npm run build
+          displayName: "Project build"
+        - task: SonarCloudAnalyze@1
+          displayName: "Run SonarCloud analysis"
+        - task: SonarCloudPublish@1
+          displayName: "Publish SonarCloud results"
+          inputs:
+            pollingTimeoutSec: "300"
+        - task: PublishPipelineArtifact@1
+          displayName: 'Publish Build Artifacts'
+          inputs:
+            targetPath: 'build'
+            artifact: 'react-dist'
+            publishLocation: 'pipeline'
