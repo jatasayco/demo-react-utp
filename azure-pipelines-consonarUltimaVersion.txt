@@ -39,7 +39,7 @@ stages:
             versionSpec: $(version_node)
         - script: npm install
           displayName: "Project install"
-        - task: SonarCloudPrepare@1
+        - task: SonarCloudPrepare@3
           displayName: "Prepare SonarCloud analysis"
           inputs:
             SonarCloud: "SONAR"   # Nombre de tu service connection
@@ -50,9 +50,9 @@ stages:
             cliProjectName: "demo-react-utp"
         - script: npm run build
           displayName: "Project build"
-        - task: SonarCloudAnalyze@1
+        - task: SonarCloudAnalyze@3
           displayName: "Run SonarCloud analysis"
-        - task: SonarCloudPublish@1
+        - task: SonarCloudPublish@3
           displayName: "Publish SonarCloud results"
           inputs:
             pollingTimeoutSec: "300"
