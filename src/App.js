@@ -1,71 +1,22 @@
 import logo from './logo.svg';
 import './App.css';
 
-
-//  Función con demasiados parámetros (Code Smell: Long Parameter List)
-function calculateSomething(a, b, c, d, e, f, g, h) {
-  return a + b + c + d + e + f + g + h;
-}
-
-// Uso de == en vez de ===
-function isZero(x) {
-  return x == 0;
-}
-
-//  Función nunca usada
-function deadCode() {
-  console.log("Esto nunca se llama");
-}
-
 function App() {
-  //  Variable sin uso
-  let unusedVar = 123;
-
-  //  Uso de var
-  var counter = 0;
-
-  //  Uso de console.log en código productivo
-  console.log("Debug: counter = " + counter);
-
-  //  Bloque try/catch vacío
-  try {
-    throw new Error("Error!");
-  } catch (e) {
-    // ignorado completamente
-  }
-
-  //  Función innecesaria dentro del render (cada render la recrea)
-  function badInlineFunction() {
-    return Math.random();
-  }
-
   return (
     <div className="App">
       <header className="App-header">
-        {/*  Imagen sin alt válido */}
-        <img src={logo} className="App-logo" alt="" />
-
-        {/*  Texto hardcodeado dentro de etiquetas mal anidadas */}
+        <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
-          <div>Div dentro de un párrafo</div>
         </p>
-
-        {/* Enlace inseguro: target="_blank" sin rel */}
         <a
           className="App-link"
-          href="http://insecure-website.com"
+          href="https://reactjs.org"
           target="_blank"
+          rel="noopener noreferrer"
         >
           Learn React
         </a>
-
-        {/*  Uso innecesario de dangerouslySetInnerHTML */}
-        <div dangerouslySetInnerHTML={{ __html: "<img src=x onerror=alert('XSS')>" }}></div>
-
-        {/*  ID duplicado */}
-        <div id="duplicado">Uno</div>
-        <div id="duplicado">Dos</div>
       </header>
     </div>
   );
