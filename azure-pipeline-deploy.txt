@@ -1,0 +1,16 @@
+- stage: DEPLOY
+    dependsOn: BUILD
+    jobs:
+    - deployment: DeployDEV
+      environment: DEV
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+              - task: DownloadPipelineArtifact@2
+                displayName: 'Download Build Artifacts'
+                inputs:
+                  artifact: 'react-dist'
+                  path: 'dist'
+              - script: echo "Despliegue a AWS"
+                displayName: "Paso despliegue a AWS"
